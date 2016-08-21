@@ -10,6 +10,7 @@ export interface IEditPropertiesProps extends IEditPropertiesWebPartProps {
 
 export interface IEditPropertiesWebPartState {
   userprofileproperty: string;
+  result?: string;
 }
 
 export default class EditProperties extends React.Component<IEditPropertiesProps, IEditPropertiesWebPartState> {
@@ -17,7 +18,8 @@ export default class EditProperties extends React.Component<IEditPropertiesProps
   constructor(props: IEditPropertiesProps) {
     super(props);
     this.state = {
-      userprofileproperty: ""
+      userprofileproperty: "",
+      result: ""
     };
   }
 
@@ -37,13 +39,12 @@ export default class EditProperties extends React.Component<IEditPropertiesProps
                 <label className={css('ms-Label ms-fontColor-white')}>{this.props.userprofileproperty}</label>
                 <input className={css('ms-TextField-field')} value={this.state.userprofileproperty} onChange={this.handleChange.bind(this)}></input>
               </div>
-              <a
-                className={css('ms-Button', styles.button) }
-                href='#'
-                onClick={this._setProperties.bind(this)}
-                >
+              <a className={css('ms-Button', styles.button) } href='#' onClick={this._setProperties.bind(this)}>
                 <span className='ms-Button-label'>Update</span>
               </a>
+              <div>
+                <label className="ms-Label">{this.state.result}</label>
+              </div>
             </div>
           </div>
         </div>
@@ -53,7 +54,7 @@ export default class EditProperties extends React.Component<IEditPropertiesProps
 
 
   public handleChange (event: any): void {
-    this.setState({userprofileproperty: event.target.value});
+    this.setState({ userprofileproperty: event.target.value});
   }
 
   public componentDidMount(): void {
@@ -63,15 +64,18 @@ export default class EditProperties extends React.Component<IEditPropertiesProps
   private _setProperties(): void {
     const userProfileService: UserProfileService = new UserProfileService(this.props);
     userProfileService.setUserProperties(this.state.userprofileproperty);
+    // userProfileService.setUserProperties(this.state.userprofileproperty).then((response) => {
+    //   this.setState({
+    //     userprofileproperty: response.value,
+    //     result: response.error.message
+    //   });
+    // });
   }
 
   private _getProperties(): void {
-
     const userProfileService: UserProfileService = new UserProfileService(this.props);
     userProfileService.getUserProperties().then((response) => {
-      this.setState({
-        userprofileproperty: response.value
-      });
+      this.setState({ userprofileproperty: response.value });
     });
   }
 }

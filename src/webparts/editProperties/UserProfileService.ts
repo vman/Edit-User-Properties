@@ -4,7 +4,7 @@ import { IEditPropertiesProps } from './components/EditProperties';
 
 interface IUserProfileService {
   getUserProperties: Promise<IUserDetails>;
-  setUserProperties: void;
+  setUserProperties: Promise<void>;
   webAbsoluteUrl: string;
   propertyName: string;
   userLoginName: string;
@@ -21,8 +21,8 @@ export class UserProfileService {
   }
 
   public getUserProperties(): Promise<IUserDetails> {
-
-    return this.context.httpClient.get(`${this.context.pageContext.web.absoluteUrl}/_api/SP.UserProfiles.PeopleManager/
+    return this.context.httpClient.get(
+    `${this.context.pageContext.web.absoluteUrl}/_api/SP.UserProfiles.PeopleManager/
     GetUserProfilePropertyFor(accountName=@v,propertyName='${this.props.propertyName}')?@v='${this.props.userLoginName}'`)
     .then((response: Response) => {
         return response.json();
@@ -42,4 +42,15 @@ export class UserProfileService {
       });
 
   }
+
+  // public setUserProperties(propertyValue: string): Promis<any>{
+  //   return this.context.httpClient.post(
+  //   `${this.context.pageContext.web.absoluteUrl}/_api/SP.UserProfiles.PeopleManager/SetSingleValueProfileProperty`,
+  //   {
+  //     body: `{"accountName":"${decodeURIComponent(this.props.userLoginName)}","propertyName":"${this.props.propertyName}","propertyValue":"${propertyValue}"}`
+  //   })
+  //   .then((response: any) => {
+  //       return response.json();
+  //   });
+  // }
 }
