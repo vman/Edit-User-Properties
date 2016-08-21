@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../node_modules/@microsoft/sp-module-interfaces/lib/manifestSchemas/jsonSchemas/clientSideComponentManifestSchema.json",
+
+  "id": "953b8ddd-b2cc-4098-aa7d-299e4469d788",
+  "componentType": "WebPart",
+  "version": "0.0.1",
+  "manifestVersion": 2,
+
+  "preconfiguredEntries": [{
+    "groupId": "953b8ddd-b2cc-4098-aa7d-299e4469d788",
+    "group": { "default": "Under Development" },
+    "title": { "default": "EditProperties" },
+    "description": { "default": "EditProperties description" },
+    "officeFabricIconFontName": "Page",
+    "properties": {
+      "description": "Use this webpart to edit your user properties",
+      "userprofileproperty": "AboutMe"
+    }
+  }]
+}

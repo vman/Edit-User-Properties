@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "name": "edit-properties-client-side-solution",
+    "id": "272f993a-0c39-46a6-9ed7-fc719011d380",
+    "version": "1.0.0.0"
+  },
+  "paths": {
+    "zippedPackage": "edit-properties.spapp"
+  }
+}
