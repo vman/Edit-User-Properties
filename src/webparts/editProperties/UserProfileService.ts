@@ -4,11 +4,16 @@ import { IEditPropertiesProps } from './components/EditProperties';
 
 interface IUserProfileService {
   getUserProperties: Promise<IUserDetails>;
-  setUserProperties: Promise<void>;
+  setUserProperties: void;
   webAbsoluteUrl: string;
   propertyName: string;
   userLoginName: string;
   context: IWebPartContext;
+}
+
+export interface IResult{
+  status: number;
+  statusText: string;
 }
 
 export class UserProfileService {
@@ -29,28 +34,24 @@ export class UserProfileService {
     });
   }
 
-  public setUserProperties(propertyValue: string): void{
+  public setUserProperties(propertyValue: string): Promise<any> {
+    const postBody: Object = {
+        'accountName': decodeURIComponent(this.props.userLoginName),
+        'propertyName': this.props.propertyName,
+        'propertyValue': propertyValue
+    };
 
-    this.context.httpClient.post(`${this.context.pageContext.web.absoluteUrl}/_api/SP.UserProfiles.PeopleManager/SetSingleValueProfileProperty`,
-    { body: `{"accountName":"${decodeURIComponent(this.props.userLoginName)}","propertyName":"${this.props.propertyName}","propertyValue":"${propertyValue}"}`  })
+    const reqHeaders: Headers = new Headers();
+    reqHeaders.append('odata-version', '3.0');
 
+    return this.context.httpClient.post(
+    `${this.context.pageContext.web.absoluteUrl}/_api/SP.UserProfiles.PeopleManager/SetSingleValueProfileProperty`,
+      {
+        body: JSON.stringify(postBody),
+        headers: reqHeaders
+      })
     .then((response: any) => {
-        console.log(response);
-      },
-      (response: any) => {
-        console.log(response);
-      });
-
+          return response.json();
+     });
   }
-
-  // public setUserProperties(propertyValue: string): Promis<any>{
-  //   return this.context.httpClient.post(
-  //   `${this.context.pageContext.web.absoluteUrl}/_api/SP.UserProfiles.PeopleManager/SetSingleValueProfileProperty`,
-  //   {
-  //     body: `{"accountName":"${decodeURIComponent(this.props.userLoginName)}","propertyName":"${this.props.propertyName}","propertyValue":"${propertyValue}"}`
-  //   })
-  //   .then((response: any) => {
-  //       return response.json();
-  //   });
-  // }
 }

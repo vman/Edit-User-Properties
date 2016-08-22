@@ -9,7 +9,7 @@ export interface IEditPropertiesProps extends IEditPropertiesWebPartProps {
 }
 
 export interface IEditPropertiesWebPartState {
-  userprofileproperty: string;
+  userprofileproperty?: string;
   result?: string;
 }
 
@@ -43,7 +43,7 @@ export default class EditProperties extends React.Component<IEditPropertiesProps
                 <span className='ms-Button-label'>Update</span>
               </a>
               <div>
-                <label className="ms-Label">{this.state.result}</label>
+                <label className="{css('ms-Label')}">{this.state.result}</label>
               </div>
             </div>
           </div>
@@ -63,13 +63,17 @@ export default class EditProperties extends React.Component<IEditPropertiesProps
 
   private _setProperties(): void {
     const userProfileService: UserProfileService = new UserProfileService(this.props);
-    userProfileService.setUserProperties(this.state.userprofileproperty);
-    // userProfileService.setUserProperties(this.state.userprofileproperty).then((response) => {
-    //   this.setState({
-    //     userprofileproperty: response.value,
-    //     result: response.error.message
-    //   });
-    // });
+    userProfileService.setUserProperties(this.state.userprofileproperty)
+    .then((response: any) => {
+      let resultMessage: string;
+      if (response["odata.error"]) {
+          resultMessage = response["odata.error"].message.value;
+      }
+      else{
+          resultMessage = "Success! Property Updated";
+      }
+      this.setState({ result: resultMessage  });
+    });
   }
 
   private _getProperties(): void {
