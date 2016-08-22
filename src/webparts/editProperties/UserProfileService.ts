@@ -34,13 +34,14 @@ export class UserProfileService {
     });
   }
 
-  public setUserProperties(propertyValue: string): Promise<any> {
+  public setUserProperties(propertyValue: string): Promise<Response> {
     const postBody: Object = {
         'accountName': decodeURIComponent(this.props.userLoginName),
         'propertyName': this.props.propertyName,
         'propertyValue': propertyValue
     };
 
+    //Explicitly add the odata v3 header to work with SharePoint REST API
     const reqHeaders: Headers = new Headers();
     reqHeaders.append('odata-version', '3.0');
 
@@ -50,8 +51,8 @@ export class UserProfileService {
         body: JSON.stringify(postBody),
         headers: reqHeaders
       })
-    .then((response: any) => {
-          return response.json();
+    .then((response: Response) => {
+          return response;
      });
   }
 }

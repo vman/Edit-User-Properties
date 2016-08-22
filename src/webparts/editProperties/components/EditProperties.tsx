@@ -35,11 +35,11 @@ export default class EditProperties extends React.Component<IEditPropertiesProps
               <p className='ms-font-l ms-fontColor-white'>
                 {this.props.description}
               </p>
-              <div className={css('ms-TextField')}>
-                <label className={css('ms-Label ms-fontColor-white')}>{this.props.userprofileproperty}</label>
-                <input className={css('ms-TextField-field')} value={this.state.userprofileproperty} onChange={this.handleChange.bind(this)}></input>
+              <div className={css('ms-TextField') }>
+                <label className={css('ms-Label ms-fontColor-white') }>{this.props.userprofileproperty}</label>
+                <input className={css('ms-TextField-field') } value={this.state.userprofileproperty} onChange={this.handleChange.bind(this) }></input>
               </div>
-              <a className={css('ms-Button', styles.button) } href='#' onClick={this._setProperties.bind(this)}>
+              <a className={css('ms-Button', styles.button) } href='#' onClick={this._setProperties.bind(this) }>
                 <span className='ms-Button-label'>Update</span>
               </a>
               <div>
@@ -53,8 +53,8 @@ export default class EditProperties extends React.Component<IEditPropertiesProps
   }
 
 
-  public handleChange (event: any): void {
-    this.setState({ userprofileproperty: event.target.value});
+  public handleChange(event: any): void {
+    this.setState({ userprofileproperty: event.target.value });
   }
 
   public componentDidMount(): void {
@@ -64,15 +64,18 @@ export default class EditProperties extends React.Component<IEditPropertiesProps
   private _setProperties(): void {
     const userProfileService: UserProfileService = new UserProfileService(this.props);
     userProfileService.setUserProperties(this.state.userprofileproperty)
-    .then((response: any) => {
-      let resultMessage: string;
-      if (response["odata.error"]) {
-          resultMessage = response["odata.error"].message.value;
+    .then((response: Response) => {
+      // Property updated successfully.
+      if (response.status == 200) {
+        this.setState({ result: "Success! Property updated" });
       }
-      else{
-          resultMessage = "Success! Property Updated";
+      // Property update failed. Parse the error message to display.
+      else if (response.status == 500) {
+        response.json().then((responseJSON) => {
+          const resultMessage: string = responseJSON["odata.error"].message.value;
+          this.setState({ result: resultMessage });
+        });
       }
-      this.setState({ result: resultMessage  });
     });
   }
 
