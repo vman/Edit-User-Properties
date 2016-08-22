@@ -11,11 +11,6 @@ interface IUserProfileService {
   context: IWebPartContext;
 }
 
-export interface IResult{
-  status: number;
-  statusText: string;
-}
-
 export class UserProfileService {
   private context: IWebPartContext;
   private props: IEditPropertiesProps;
